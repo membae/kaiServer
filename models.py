@@ -33,3 +33,21 @@ class Vehicle(db.Model,SerializerMixin):
     engine_size=db.Column(db.String,nullable=False)
     fuel_type=db.Column(db.String,nullable=False)
     image_url=db.Column(db.String,nullable=False)
+
+
+class Bike(db.Model,SerializerMixin):
+    __tablename__="bikes"
+    
+    id=db.Column(db.Integer,primary_key=True)
+    name=db.Column(db.String,nullable=False)
+    price=db.Column(db.Integer,nullable=False)
+    year_of_manufacture=db.Column(db.Integer,nullable=False)
+    current_location=db.Column(db.String,nullable=False)
+    availability=db.Column(db.String,nullable=False,default='available')
+    millage=db.Column(db.String,nullable=False)
+    engine_size=db.Column(db.String,nullable=False)
+    fuel_type=db.Column(db.String,nullable=False)
+    image_url=db.Column(db.String,nullable=False)
+
+    
+    
