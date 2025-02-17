@@ -32,6 +32,7 @@ class Vehicle(db.Model,SerializerMixin):
     millage=db.Column(db.String,nullable=False)
     engine_size=db.Column(db.String,nullable=False)
     fuel_type=db.Column(db.String,nullable=False)
+    description=db.Column(db.String,nullable=False)
     image_url=db.Column(db.String,nullable=False)
 
 
@@ -47,7 +48,6 @@ class Bike(db.Model,SerializerMixin):
     millage=db.Column(db.String,nullable=False)
     engine_size=db.Column(db.String,nullable=False)
     fuel_type=db.Column(db.String,nullable=False)
+    description=db.Column(db.String,nullable=False)
     image_url=db.Column(db.String,nullable=False)
-
-    
     
