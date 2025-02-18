@@ -45,6 +45,15 @@ class Home(Resource):
 api.add_resource(Home,'/')
 
 
+class GetVehicles(Resource):
+    def get(self):
+        vehicles=Vehicle.query.all()
+        if vehicles:
+            return make_response([vehicle.to_dict() for vehicle in vehicles],200)
+        return make_response({"msg":"No vehicles found"},404)
+    
+
+api.add_resource(GetVehicles,'/vehicles')
 
 
 if __name__=='__main__':
