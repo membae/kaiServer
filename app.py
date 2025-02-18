@@ -52,6 +52,42 @@ class GetVehicles(Resource):
             return make_response([vehicle.to_dict() for vehicle in vehicles],200)
         return make_response({"msg":"No vehicles found"},404)
     
+    def post(self):
+        data=request.form
+        images=request.files.getlist("images")
+        required_fields = [
+        "name", "price", "seat_material", "year_of_manufacture",
+        "current_location", "drive", "millage", "engine_size",
+        "fuel_type", "description"
+        ]
+        missing_fields=[field for field in required_fields if not data.get(field)]
+        if missing_fields:
+            return make_response({"msg":f"Missing field required:{', '.join(missing_fields)}"},400)
+        existing=Vehicle.query.filter_by(name=data.get("name"),year_of_manufacture=data.get("year_of_manufacture")).first()
+        if existing:
+            return make_response({"msg":"the vehicle already exists"},400)
+        image_urls=[]
+        for image in images:
+            upload_result=cloudinary.uploader.upload(image)
+            image_urls.append(upload_result["secure_url"])
+        new_vehicle = Vehicle(
+        name=data.get("name"),
+        price=data.get("price"),
+        seat_material=data.get("seat_material"),
+        year_of_manufacture=int(data.get("year_of_manufacture")),
+        current_location=data.get("current_location"),
+        availability=data.get("availability", "available"),
+        drive=data.get("drive"),
+        millage=data.get("millage"),
+        engine_size=data.get("engine_size"),
+        fuel_type=data.get("fuel_type"),
+        description=data.get("description"),
+        image_url=json.dumps(image_urls)
+        )
+        db.session.add(new_vehicle)
+        db.session.commit()
+        return make_response(new_vehicle.to_dict(),201)
+        
 
 api.add_resource(GetVehicles,'/vehicles')
 
