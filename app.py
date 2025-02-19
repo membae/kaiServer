@@ -110,6 +110,14 @@ class VehicleById(Resource):
         db.session.commit()
         return make_response(vehicle.to_dict(),200)
 
+
+    def delete(self,id):
+        vehicle=Vehicle.query.filter_by(id=id).first()
+        if vehicle:
+            db.session.delete(vehicle)
+            db.session.commit()
+            return make_response({"msg":"vehicle deleted successfully"},204)
+        return make_response({"msg":"Vehicle with given id does not exist"},404)
 api.add_resource(VehicleById,'/vehicle/<int:id>')
         
     
