@@ -104,7 +104,7 @@ class VehicleById(Resource):
             return make_response({"msg":"such a vehicle does not exixts in the database"},404)
         data=request.form
         for attr in data:
-            if attr in ['name','price','seat_material','year_of_manufacture','current_location','availability','drive','millage','engine_size','fuel_type','description','image_url']:
+            if attr in ['name','price','seat_material','year_of_manufacture','current_location','availability','drive','millage','engine_size','fuel_type','description','images']:
                 setattr(vehicle,attr,data.get(attr))
         db.session.add(vehicle)
         db.session.commit()
@@ -119,9 +119,20 @@ class VehicleById(Resource):
             return make_response({"msg":"vehicle deleted successfully"},204)
         return make_response({"msg":"Vehicle with given id does not exist"},404)
 api.add_resource(VehicleById,'/vehicle/<int:id>')
-        
-    
 
+
+class GetBikes(Resource):
+    def get(self):
+        bikes=Bike.query.all()
+        if bikes:
+            return make_response([bike.to_dict() for bike in bikes],200)
+        return make_response({"msg":"No bikes found"}) 
+    
+    def post(self):
+        data=request.form
+               
+    
+api.add_resource(GetBikes,'/bikes')
 
 if __name__=='__main__':
     app.run(debug=True)
