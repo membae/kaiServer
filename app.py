@@ -92,5 +92,28 @@ class GetVehicles(Resource):
 api.add_resource(GetVehicles,'/vehicles')
 
 
+class VehicleById(Resource):
+    def get(self,id):
+        vehicle=Vehicle.query.filter_by(id=id).first()
+        if vehicle:
+            return make_response(vehicle.to_dict(),200)
+        return make_response({"msg":"vehicle with the given id does not exist"},404)
+    def patch(self,id):
+        vehicle=Vehicle.query.filter_by(id=id).first()
+        if not vehicle:
+            return make_response({"msg":"such a vehicle does not exixts in the database"},404)
+        data=request.form
+        for attr in data:
+            if attr in ['name','price','seat_material','year_of_manufacture','current_location','availability','drive','millage','engine_size','fuel_type','description','image_url']:
+                setattr(vehicle,attr,data.get(attr))
+        db.session.add(vehicle)
+        db.session.commit()
+        return make_response(vehicle.to_dict(),200)
+
+api.add_resource(VehicleById,'/vehicle/<int:id>')
+        
+    
+
+
 if __name__=='__main__':
     app.run(debug=True)
